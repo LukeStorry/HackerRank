@@ -1,0 +1,3 @@
+[submodule "ProjectEuler"]
+	path = ProjectEuler
+	url = https://github.com/LukeStorry/ProjectEuler.git
