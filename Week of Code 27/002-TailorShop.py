@@ -42,5 +42,3 @@ for i in a:
     total_buttons += num
     
 print(total_buttons)
-    
-print(sum(clusters))
