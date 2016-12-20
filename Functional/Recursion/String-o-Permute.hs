@@ -2,7 +2,8 @@
 -- given a string of even length, swap the characters at the even positions with the next character
 
 permute :: String -> String
-permute x = ""
+permute [] = []
+permute (a:b:s) = [b] ++ [a] ++ permute s
 
 main :: IO ()
 main = do
