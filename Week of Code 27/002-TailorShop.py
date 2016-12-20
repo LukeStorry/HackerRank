@@ -19,18 +19,33 @@ she wants to pay at least ai dollars.
 # The second line contains n space-separated integers where each integer i denotes the value of ai 
 
 # Output:
-Print a single integer denoting the minimum number of buttons required for Jaime to satisfy his customer's request.
+# Print a single integer denoting the minimum number of buttons required for Jaime to satisfy his customer's request.
 
 
-tailor :: Int -> Int -> [Int] -> Int
-tailor n p a = 0
+import Control.Applicative
+import Control.Monad
+import System.IO
+
+next_unused_int :: [Int] -> Int -> Int
+next_unused_int list num
+    | num `elem` list  = next_unused_int list (num+1)
+    | otherwise = num
+    
+    
+min_buttons :: Int -> Int -> Int
+min_buttons p c = ceiling $ (fromIntegral c) / (fromIntegral p)
+
+
+tailor :: Int -> [Int] -> Int
+tailor _ [] = 0
+tailor p a = sum $ map (next_unused_int (min_buttons p) a   
+
 
 main :: IO ()
 main = do
-    n_temp <- getLine
-    let n_t = words n_temp
-    let n = read $ n_t!!0 :: Int
-    let p = read $ n_t!!1 :: Int
-    a_temp <- getLine
-    let a = map read $ words a_temp :: [Int]
-    print $ tailor n p a
+    temp <- getLine
+    let p = read $ (words temp) !!1 :: Int
+    temp <- getLine
+    let a = map read $ words temp :: [Int]
+    print $ map (next_unused_int [2,3,3]) [2,3,3]
+    --print $ tailor 2 [4]
