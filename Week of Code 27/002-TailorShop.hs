@@ -21,27 +21,26 @@
 -- Output:
 -- Print a single integer denoting the minimum number of buttons required for Jaime to satisfy his customer's request.
 
-
 import Control.Applicative
 import Control.Monad
 import System.IO
+
+min_buttons :: Int -> Int -> Int
+min_buttons p x = ceiling $ (fromIntegral x) / (fromIntegral p)
 
 next_unused_int :: [Int] -> Int -> Int
 next_unused_int list num
     | num `elem` list  = next_unused_int list (num+1)
     | otherwise = num
-    
-insert_int :: [Int] -> Int -> [Int]
-insert_int list num = list ++ [next_unused_int list num]
-    
-min_buttons :: Int -> Int -> Int
-min_buttons p c = ceiling $ (fromIntegral c) / (fromIntegral p)
 
-
+replace_used_ints :: [Int] -> [Int] -> [Int]
+replace_used_ints done [] = done
+replace_used_ints done (x:xs)
+    | x `elem` done  = replace_used_ints done     ((x+1):xs)
+    | otherwise      = replace_used_ints (x:done) xs
+    
 tailor :: Int -> [Int] -> Int
-tailor _ [] = 0
-tailor p a = sum $ foldl1 insert_int $ map (min_buttons p) a   
-
+tailor p a = sum . replace_used_ints [] $ map (min_buttons p) a
 
 main :: IO ()
 main = do
@@ -49,5 +48,4 @@ main = do
     let p = read $ (words temp) !!1 :: Int
     temp <- getLine
     let a = map read $ words temp :: [Int]
-    print $ map (next_unused_int [2,3,3]) [2,3,3]
-    --print $ tailor 2 [4]
+    print $ tailor p a
