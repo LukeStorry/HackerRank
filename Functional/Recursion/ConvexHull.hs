@@ -36,9 +36,19 @@ nextpoint a b (c:list)
     | otherwise                     = d
     where 
         d = nextpoint a b list
-        
-        
---add point with max angle to list, then move there and iterate.
+
+
+-- finds the leftmost point
+leftpoint :: [(Int, Int)] -> (Int, Int)
+leftpoint [a] = a
+leftpoint ((x1,y1):xs)
+    | x1 < x2   = (x1,y1)
+    | otherwise = (x2,y2)
+    where 
+        (x2,y2) = leftpoint xs
+
+
+-- add point with max angle to list, then move there and iterate.
 hull :: [(Int, Int)] -> [(Int, Int)]
 hull points = points
 
