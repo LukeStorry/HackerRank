@@ -6,21 +6,23 @@
 
 import Text.Printf
 
+type Point = (Int, Int)
+
 
 -- distance between two points
-distance :: (Int, Int) -> (Int, Int) -> Double
+distance :: Point -> Point -> Double
 distance (x1, y1) (x2, y2) = sqrt $ fromIntegral $ (x1-x2)^2 + (y1-y2)^2
 
 
 -- folds list of points using distance
-totaldistance :: [(Int, Int)] -> Double
+totaldistance :: [Point] -> Double
 totaldistance [] = 0
 totaldistance [a] = 0
 totaldistance (a:b:s) = totaldistance (b:s) + distance a b
 
 
 -- angle between three points using cosine law
-angle :: (Int, Int) -> (Int, Int) -> (Int, Int) -> Double
+angle :: Point -> Point -> Point -> Double
 angle a b c = acos((ab^2 + ac^2 - bc^2) / (2 * ab * ac))
     where
         ab = distance a b
@@ -29,7 +31,7 @@ angle a b c = acos((ab^2 + ac^2 - bc^2) / (2 * ab * ac))
 
 
 -- chooses best next point
-nextpoint :: (Int, Int) -> (Int, Int) -> [(Int, Int)] -> (Int, Int)
+nextpoint :: Point -> Point -> [Point] -> Point
 nextpoint a b [c] = c
 nextpoint a b (c:list) 
     | (angle a b c) > (angle a b d) = c
@@ -39,23 +41,32 @@ nextpoint a b (c:list)
 
 
 -- finds the leftmost point
-leftpoint :: [(Int, Int)] -> (Int, Int)
-leftpoint [a] = a
-leftpoint ((x1,y1):xs)
+-- TODO: attempt with maps?
+firstpoint :: [Point] -> Point
+firstpoint [a] = a
+firstpoint ((x1,y1):xs)
     | x1 < x2   = (x1,y1)
     | otherwise = (x2,y2)
     where 
-        (x2,y2) = leftpoint xs
+        (x2,y2) = firstpoint xs
+
+
+-- finds the second point
+secondpoint :: [Point] -> Point
+secondpoint points = nextpoint (x,y) (x,y+1) points
+    where
+        (x,y) = firstpoint points
 
 
 -- add point with max angle to list, then move there and iterate.
-hull :: [(Int, Int)] -> [(Int, Int)]
-hull points = points
+hull :: [Point] -> [Point]
+hull points = points --TODO
 
 
 -- main solve function
-solve :: [(Int, Int)] -> Double
+solve :: [Point] -> Double
 solve points = totaldistance . hull $ points
+
 
 -- io
 main :: IO ()
