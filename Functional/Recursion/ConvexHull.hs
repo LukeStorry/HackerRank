@@ -15,6 +15,7 @@ distance (x1, y1) (x2, y2) = sqrt $ fromIntegral $ (x1-x2)^2 + (y1-y2)^2
 -- folds list of points using distance
 totaldistance :: [(Int, Int)] -> Double
 totaldistance [] = 0
+totaldistance [a] = 0
 totaldistance (a:b:s) = totaldistance (b:s) + distance a b
 
 
@@ -27,14 +28,26 @@ angle a b c = acos((ab^2 + ac^2 - bc^2) / (2 * ab * ac))
         bc = distance b c
 
 
+-- chooses best next point
+nextpoint :: (Int, Int) -> (Int, Int) -> [(Int, Int)] -> (Int, Int)
+nextpoint a b [c] = c
+nextpoint a b (c:list) 
+    | (angle a b c) > (angle a b d) = c
+    | otherwise                     = d
+    where 
+        d = nextpoint a b list
+        
+        
 --add point with max angle to list, then move there and iterate.
 hull :: [(Int, Int)] -> [(Int, Int)]
 hull points = points
 
+
+-- main solve function
 solve :: [(Int, Int)] -> Double
 solve points = totaldistance . hull $ points
 
-
+-- io
 main :: IO ()
 main = do
   n <- readLn :: IO Int
