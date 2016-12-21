@@ -21,7 +21,6 @@
 -- Output:
 -- Print a single integer denoting the minimum number of buttons required for Jaime to satisfy his customer's request.
 
-
 min_buttons :: Int -> Int -> Int
 min_buttons p x 
     | x `mod` p == 0  = x `quot` p
@@ -37,7 +36,7 @@ add_to_list f [] a = [f a]
 add_to_list f list a = list ++ [(next_unused_int list (f a))]
     
 tailor :: Int -> [Int] -> Int
-tailor p a = sum . head $ scanl (add_to_list (min_buttons p)) [] a
+tailor p a = sum . last $ scanl (add_to_list (min_buttons p)) [] a
 
 main :: IO ()
 main = do
