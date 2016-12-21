@@ -20,28 +20,24 @@
 
 -- Output:
 -- Print a single integer denoting the minimum number of buttons required for Jaime to satisfy his customer's request.
-import Control.Applicative
-import Control.Monad
-import System.IO
+
 
 min_buttons :: Int -> Int -> Int
 min_buttons p x 
     | x `mod` p == 0  = x `quot` p
     | otherwise       = x `quot` p + 1
-    
+
 next_unused_int :: [Int] -> Int -> Int
 next_unused_int list num
     | num `elem` list  = next_unused_int list (num+1)
     | otherwise = num
 
-replace_used_ints :: [Int] -> [Int] -> [Int]
-replace_used_ints done [] = done
-replace_used_ints done (x:xs)
-    | x `elem` done  = replace_used_ints done     ((x+1):xs)
-    | otherwise      = replace_used_ints (x:done) xs
+add_to_list :: (Int -> Int) -> [Int] -> Int -> [Int] 
+add_to_list f [] a = [f a]
+add_to_list f list a = list ++ [(next_unused_int list (f a))]
     
 tailor :: Int -> [Int] -> Int
-tailor p a = sum . replace_used_ints [] $ map (min_buttons p) a
+tailor p a = sum . head $ scanl (add_to_list (min_buttons p)) [] a
 
 main :: IO ()
 main = do
