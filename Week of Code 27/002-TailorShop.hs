@@ -20,14 +20,15 @@
 
 -- Output:
 -- Print a single integer denoting the minimum number of buttons required for Jaime to satisfy his customer's request.
-
 import Control.Applicative
 import Control.Monad
 import System.IO
 
 min_buttons :: Int -> Int -> Int
-min_buttons p x = ceiling $ (fromIntegral x) / (fromIntegral p)
-
+min_buttons p x 
+    | x `mod` p == 0  = x `quot` p
+    | otherwise       = x `quot` p + 1
+    
 next_unused_int :: [Int] -> Int -> Int
 next_unused_int list num
     | num `elem` list  = next_unused_int list (num+1)
